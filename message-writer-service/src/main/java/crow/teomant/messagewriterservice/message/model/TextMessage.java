@@ -1,4 +1,4 @@
-package crow.teomant.messageservice.message.model;
+package crow.teomant.messagewriterservice.message.model;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
