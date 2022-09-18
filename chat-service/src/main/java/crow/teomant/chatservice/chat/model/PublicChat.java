@@ -3,9 +3,11 @@ package crow.teomant.chatservice.chat.model;
 import java.util.Set;
 import java.util.UUID;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 @NoArgsConstructor
+@TypeAlias("chat.public")
 public class PublicChat extends Chat {
     @Field("name")
     private String name;
