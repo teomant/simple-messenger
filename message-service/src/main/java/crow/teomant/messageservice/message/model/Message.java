@@ -24,8 +24,6 @@ public abstract class Message {
     private UUID chat;
     @Field("timestamp")
     private LocalDateTime timestamp;
-    @Field("correlationId")
-    private UUID correlationId;
 
     public abstract Object getContent();
 }

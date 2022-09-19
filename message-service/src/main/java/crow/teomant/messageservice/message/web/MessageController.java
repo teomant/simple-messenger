@@ -19,22 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class MessageController {
     private final MessageService messageService;
 
-    @PostMapping
-    public UUID create(@RequestBody CreateDto dto) {
-        return messageService.sendTextMessage(dto.from, dto.to, UUID.randomUUID(), dto.content);
-    }
-
     @PostMapping("/{id}")
     public Collection<Message> get(@PathVariable UUID id, @RequestBody GetDto dto) {
         return messageService.getMessages(id, dto.from, dto.to);
-    }
-
-    @Data
-    public static class CreateDto {
-        private UUID from;
-        private UUID to;
-        private String content;
-        private UUID correlationId;
     }
 
     @Data

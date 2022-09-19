@@ -14,8 +14,8 @@ public class TextMessage extends Message {
     @Field("content")
     private String content;
 
-    public TextMessage(UUID id, UUID author, UUID chat, LocalDateTime timestamp, UUID correlationId, String content) {
-        super(id, author, chat, timestamp, correlationId);
+    public TextMessage(UUID id, UUID author, UUID chat, LocalDateTime timestamp, String content) {
+        super(id, author, chat, timestamp);
         this.content = content;
     }
 }

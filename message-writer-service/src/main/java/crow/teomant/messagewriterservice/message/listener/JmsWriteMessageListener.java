@@ -1,6 +1,8 @@
 package crow.teomant.messagewriterservice.message.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import crow.teomant.messagewriterservice.message.model.Message;
+import crow.teomant.messagewriterservice.message.model.ReplaceTextMessage;
 import crow.teomant.messagewriterservice.message.model.TextMessage;
 import crow.teomant.messagewriterservice.message.repository.MessageMongoRepository;
 import java.time.LocalDateTime;
@@ -46,9 +48,31 @@ public class JmsWriteMessageListener {
         }
 
         repository.save(
-            new TextMessage(UUID.randomUUID(), create.from, create.to, LocalDateTime.now(), create.correlationId,
-                create.content)
+            new TextMessage(create.id, create.from, create.to, LocalDateTime.now(), create.content)
         );
+    }
+
+    @JmsListener(destination = "message.text.replace")
+    @SneakyThrows
+    public void replaceTextMessage(String request) {
+        TextMessageReplaceCreate create = objectMapper.readValue(request, TextMessageReplaceCreate.class);
+
+        Message message = repository.findById(create.getReplaceId()).orElseThrow(IllegalArgumentException::new);
+
+        if (message instanceof TextMessage) {
+            TextMessage textMessage = (TextMessage) message;
+
+            if (!textMessage.getAuthor().equals(create.getFrom()) || !textMessage.getChat().equals(create.getTo())) {
+                throw new IllegalArgumentException();
+            }
+
+            repository.save(
+                new ReplaceTextMessage(create.id, create.from, create.to, LocalDateTime.now(), create.content,
+                    create.replaceId)
+            );
+        } else {
+            throw new IllegalArgumentException();
+        }
     }
 
     @Data
@@ -64,10 +88,21 @@ public class JmsWriteMessageListener {
     }
 
     @Data
-    private static class TextMessageCreate {
+    @AllArgsConstructor
+    public static class TextMessageCreate {
+        private UUID id;
         private UUID from;
         private UUID to;
-        private UUID correlationId;
-        String content;
+        private String content;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class TextMessageReplaceCreate {
+        private UUID id;
+        private UUID replaceId;
+        private UUID from;
+        private UUID to;
+        private String content;
     }
 }

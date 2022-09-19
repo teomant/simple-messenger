@@ -1,2 +1,6 @@
 /activemq-data/
 /.idea/
+/message-writer-service/src/main/resources/application-local.properties
+/message-service/src/main/resources/application-local.properties
+/user-service/src/main/resources/application-local.properties
+/chat-service/src/main/resources/application-local.properties
