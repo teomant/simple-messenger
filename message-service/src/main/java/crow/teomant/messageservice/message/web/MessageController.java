@@ -1,6 +1,6 @@
 package crow.teomant.messageservice.message.web;
 
-import crow.teomant.messageservice.message.model.Message;
+import crow.teomant.messagecommon.model.Message;
 import crow.teomant.messageservice.message.service.MessageService;
 import java.time.LocalDateTime;
 import java.util.Collection;

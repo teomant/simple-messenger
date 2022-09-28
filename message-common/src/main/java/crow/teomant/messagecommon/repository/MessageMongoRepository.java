@@ -1,6 +1,6 @@
-package crow.teomant.messageservice.message.repository;
+package crow.teomant.messagecommon.repository;
 
-import crow.teomant.messageservice.message.model.Message;
+import crow.teomant.messagecommon.model.Message;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;

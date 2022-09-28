@@ -1,4 +1,4 @@
-package crow.teomant.messagewriterservice.message.model;
+package crow.teomant.messagecommon.model;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.time.LocalDateTime;

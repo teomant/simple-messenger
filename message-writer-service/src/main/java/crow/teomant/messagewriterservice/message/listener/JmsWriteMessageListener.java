@@ -1,9 +1,9 @@
 package crow.teomant.messagewriterservice.message.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import crow.teomant.messagewriterservice.message.model.Message;
-import crow.teomant.messagewriterservice.message.model.ReplaceMessage;
-import crow.teomant.messagewriterservice.message.repository.MessageMongoRepository;
+import crow.teomant.messagecommon.model.Message;
+import crow.teomant.messagecommon.model.ReplaceMessage;
+import crow.teomant.messagecommon.repository.MessageMongoRepository;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.AllArgsConstructor;

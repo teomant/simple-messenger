@@ -1,7 +1,7 @@
-package crow.teomant.messageservice.message;
+package crow.teomant.messagecommon;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import crow.teomant.messageservice.message.model.Message;
+import crow.teomant.messagecommon.model.Message;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
