@@ -2,8 +2,7 @@ package crow.teomant.messagewriterservice.message.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import crow.teomant.messagewriterservice.message.model.Message;
-import crow.teomant.messagewriterservice.message.model.ReplaceTextMessage;
-import crow.teomant.messagewriterservice.message.model.TextMessage;
+import crow.teomant.messagewriterservice.message.model.ReplaceMessage;
 import crow.teomant.messagewriterservice.message.repository.MessageMongoRepository;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -48,7 +47,8 @@ public class JmsWriteMessageListener {
         }
 
         repository.save(
-            new TextMessage(create.id, create.from, create.to, LocalDateTime.now(), create.content)
+            new Message(create.id, create.from, create.to, LocalDateTime.now(),
+                new Message.TextMessageContent(create.content))
         );
     }
 
@@ -59,16 +59,16 @@ public class JmsWriteMessageListener {
 
         Message message = repository.findById(create.getReplaceId()).orElseThrow(IllegalArgumentException::new);
 
-        if (message instanceof TextMessage) {
-            TextMessage textMessage = (TextMessage) message;
+        if (objectMapper.convertValue(message.getMessageContent(),
+            Message.MessageContent.class) instanceof Message.TextMessageContent) {
 
-            if (!textMessage.getAuthor().equals(create.getFrom()) || !textMessage.getChat().equals(create.getTo())) {
+            if (!message.getAuthor().equals(create.getFrom()) || !message.getChat().equals(create.getTo())) {
                 throw new IllegalArgumentException();
             }
 
             repository.save(
-                new ReplaceTextMessage(create.id, create.from, create.to, LocalDateTime.now(), create.content,
-                    create.replaceId)
+                new ReplaceMessage(create.id, create.from, create.to, LocalDateTime.now(),
+                    new Message.TextMessageContent(create.content), create.replaceId)
             );
         } else {
             throw new IllegalArgumentException();

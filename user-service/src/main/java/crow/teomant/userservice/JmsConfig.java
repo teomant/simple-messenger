@@ -2,7 +2,6 @@ package crow.teomant.userservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.jms.ConnectionFactory;
-import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.broker.BrokerService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

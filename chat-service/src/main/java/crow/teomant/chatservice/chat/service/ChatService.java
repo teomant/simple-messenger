@@ -1,7 +1,5 @@
 package crow.teomant.chatservice.chat.service;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import crow.teomant.chatservice.chat.model.Chat;
 import crow.teomant.chatservice.chat.model.UsersChat;
