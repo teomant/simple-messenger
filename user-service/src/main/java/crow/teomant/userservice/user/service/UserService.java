@@ -1,5 +1,6 @@
 package crow.teomant.userservice.user.service;
 
+import crow.teomant.checker.user.service.UserCheckerService;
 import crow.teomant.userservice.user.model.User;
 import crow.teomant.userservice.user.repository.UserMongoRepository;
 import java.util.HashSet;
@@ -11,9 +12,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService {
     private final UserMongoRepository repository;
+    private final UserCheckerService checkerService;
 
     public User register(String username, String about) {
-        if (repository.findByUsername(username).isPresent()) {
+        if (!checkerService.checkUserByLogin(username)) {
             throw new IllegalArgumentException();
         }
 

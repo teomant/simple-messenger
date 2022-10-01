@@ -1,6 +1,8 @@
 package crow.teomant.messagewriterservice.message.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import crow.teomant.checker.chat.service.ChatCheckerService;
+import crow.teomant.checker.user.service.UserCheckerService;
 import crow.teomant.messagecommon.model.Message;
 import crow.teomant.messagecommon.model.ReplaceMessage;
 import crow.teomant.messagecommon.repository.MessageMongoRepository;
@@ -11,38 +13,26 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.jms.annotation.JmsListener;
-import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
 public class JmsWriteMessageListener {
-    private final JmsMessagingTemplate jmsMessagingTemplate;
     private final ObjectMapper objectMapper;
     private final MessageMongoRepository repository;
+    private final UserCheckerService userCheckerService;
+    private final ChatCheckerService chatCheckerService;
 
     @JmsListener(destination = "message.text.create")
     @SneakyThrows
     public void sendTextMessage(String request) {
         TextMessageCreate create = objectMapper.readValue(request, TextMessageCreate.class);
-        SearchResponse userSearchResponse =
-            objectMapper.readValue(
-                jmsMessagingTemplate.convertSendAndReceive("user.search",
-                    objectMapper.writeValueAsString(new SearchRequest(create.from)), String.class),
-                SearchResponse.class
-            );
-        SearchResponse chatSearchResponse =
-            objectMapper.readValue(
-                jmsMessagingTemplate.convertSendAndReceive("chat.search",
-                    objectMapper.writeValueAsString(new SearchRequest(create.to)), String.class),
-                SearchResponse.class
-            );
 
-        if (!userSearchResponse.getResult()) {
+        if (!userCheckerService.checkUser(create.from)) {
             throw new IllegalArgumentException();
         }
 
-        if (!chatSearchResponse.getResult()) {
+        if (!chatCheckerService.chatExistsAndParticipantIn(create.to, create.from)) {
             throw new IllegalArgumentException();
         }
 
@@ -59,12 +49,16 @@ public class JmsWriteMessageListener {
 
         Message message = repository.findById(create.getReplaceId()).orElseThrow(IllegalArgumentException::new);
 
+        if (!chatCheckerService.chatExistsAndParticipantIn(message.getChat(), message.getAuthor())) {
+            throw new IllegalArgumentException();
+        }
+
+        if (!message.getAuthor().equals(create.getFrom()) || !message.getChat().equals(create.getTo())) {
+            throw new IllegalArgumentException();
+        }
+
         if (objectMapper.convertValue(message.getMessageContent(),
             Message.MessageContent.class) instanceof Message.TextMessageContent) {
-
-            if (!message.getAuthor().equals(create.getFrom()) || !message.getChat().equals(create.getTo())) {
-                throw new IllegalArgumentException();
-            }
 
             repository.save(
                 new ReplaceMessage(create.id, create.from, create.to, LocalDateTime.now(),
@@ -73,18 +67,6 @@ public class JmsWriteMessageListener {
         } else {
             throw new IllegalArgumentException();
         }
-    }
-
-    @Data
-    private static class SearchResponse {
-
-        private Boolean result;
-    }
-
-    @Data
-    @AllArgsConstructor
-    private static class SearchRequest {
-        private UUID id;
     }
 
     @Data

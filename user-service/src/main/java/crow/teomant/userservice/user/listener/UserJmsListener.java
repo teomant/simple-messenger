@@ -19,16 +19,6 @@ public class UserJmsListener {
     private final UserMongoRepository userMongoRepository;
     private final ObjectMapper objectMapper;
 
-    @JmsListener(destination = "user.search")
-    @SneakyThrows
-    public String searchForUser(String request) {
-        return objectMapper.writeValueAsString(
-            new UserJmsListener.SearchResponse(
-                userMongoRepository.findById(objectMapper.readValue(request, SearchRequest.class).getId()).isPresent()
-            )
-        );
-    }
-
     @JmsListener(destination = "user.chat.added")
     @SneakyThrows
     public void chatAdded(String chatAdded) {
@@ -37,23 +27,6 @@ public class UserJmsListener {
         User user = userMongoRepository.findById(added.getUserId()).orElseThrow(IllegalStateException::new);
         user.getChatIds().add(added.getChatId());
         userMongoRepository.save(user);
-    }
-
-    @Data
-    @AllArgsConstructor
-    private static class SearchResponse {
-        private Boolean result;
-    }
-
-    @Data
-    private static class SearchRequest {
-
-        private UUID id;
-
-        @JsonCreator
-        public SearchRequest(@JsonProperty("id") UUID id) {
-            this.id = id;
-        }
     }
 
     @Data
