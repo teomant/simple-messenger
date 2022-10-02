@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ChatCheckerMongoRepository extends MongoRepository<Chat, UUID> {
-    List<UsersChat> findByParticipantsContains(Set<UUID> ids);
+    List<Chat> findByParticipantsContains(Set<UUID> ids);
 }

@@ -26,6 +26,8 @@ dependencies {
     implementation "org.apache.activemq:activemq-broker"
     implementation 'org.apache.activemq:activemq-kahadb-store:5.17.2'
     implementation 'crow.teomant:checker:0.0.1-SNAPSHOT'
+    implementation 'org.springframework.retry:spring-retry:1.2.5.RELEASE'
+    implementation 'org.springframework:spring-aspects:5.2.8.RELEASE'
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'

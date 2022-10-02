@@ -15,7 +15,7 @@ public class UserService {
     private final UserCheckerService checkerService;
 
     public User register(String username, String about) {
-        if (!checkerService.checkUserByLogin(username)) {
+        if (checkerService.checkUserByLogin(username)) {
             throw new IllegalArgumentException();
         }
 
