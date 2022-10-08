@@ -1,4 +1,4 @@
-package crow.teomant.messageservice;
+package crow.teomant.reactionwriteservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.jms.ConnectionFactory;
@@ -15,7 +15,7 @@ import org.springframework.jms.support.converter.MessageType;
 
 @Configuration
 @EnableJms
-public class JmsConfig {
+public class ReactionWriteJmsConfig {
 
     @Bean
     public JmsListenerContainerFactory<?> jmsListenerContainerFactory(ConnectionFactory connectionFactory,

@@ -4,3 +4,5 @@
 /message-service/src/main/resources/application-local.properties
 /user-service/src/main/resources/application-local.properties
 /chat-service/src/main/resources/application-local.properties
+/reaction-write-service/src/main/resources/application-local.properties
+/reaction-service/src/main/resources/application-local.properties

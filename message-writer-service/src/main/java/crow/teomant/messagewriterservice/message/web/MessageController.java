@@ -2,6 +2,7 @@ package crow.teomant.messagewriterservice.message.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import crow.teomant.messagewriterservice.message.listener.JmsWriteMessageListener;
+import java.util.Map;
 import java.util.UUID;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,18 @@ public class MessageController {
     }
 
     @SneakyThrows
+    @PostMapping("/vote")
+    public UUID createVote(@RequestBody CreateVoteDto dto) {
+
+        UUID id = UUID.randomUUID();
+        jmsTemplate.convertAndSend("message.vote.create",
+            objectMapper.writeValueAsString(
+                new JmsWriteMessageListener.VoteMessageCreate(id, dto.from, dto.to, dto.content))
+        );
+        return id;
+    }
+
+    @SneakyThrows
     @PostMapping("/{replaceId}")
     public UUID replace(@PathVariable("replaceId") UUID replaceId, @RequestBody CreateDto dto) {
 
@@ -50,6 +63,13 @@ public class MessageController {
         private UUID from;
         private UUID to;
         private String content;
+    }
+
+    @Data
+    public static class CreateVoteDto {
+        private UUID from;
+        private UUID to;
+        private Map<Integer, String> content;
     }
 
 }

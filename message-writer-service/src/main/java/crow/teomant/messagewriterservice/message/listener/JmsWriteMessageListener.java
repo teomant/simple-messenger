@@ -7,6 +7,7 @@ import crow.teomant.messagecommon.model.Message;
 import crow.teomant.messagecommon.model.ReplaceMessage;
 import crow.teomant.messagecommon.repository.MessageMongoRepository;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,6 +40,25 @@ public class JmsWriteMessageListener {
         repository.save(
             new Message(create.id, create.from, create.to, LocalDateTime.now(),
                 new Message.TextMessageContent(create.content))
+        );
+    }
+
+    @JmsListener(destination = "message.vote.create")
+    @SneakyThrows
+    public void sendVoteMessage(String request) {
+        VoteMessageCreate create = objectMapper.readValue(request, VoteMessageCreate.class);
+
+        if (!userCheckerService.checkUser(create.from)) {
+            throw new IllegalArgumentException();
+        }
+
+        if (!chatCheckerService.chatExistsAndParticipantIn(create.to, create.from)) {
+            throw new IllegalArgumentException();
+        }
+
+        repository.save(
+            new Message(create.id, create.from, create.to, LocalDateTime.now(),
+                new Message.VoteMessageContent(create.content))
         );
     }
 
@@ -76,6 +96,15 @@ public class JmsWriteMessageListener {
         private UUID from;
         private UUID to;
         private String content;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class VoteMessageCreate {
+        private UUID id;
+        private UUID from;
+        private UUID to;
+        private Map<Integer, String> content;
     }
 
     @Data

@@ -1,8 +1,7 @@
-package crow.teomant.messagecommon.model;
+package crow.teomant.reactioncommon.model;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.time.LocalDateTime;
-import java.util.Map;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,8 +14,8 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "SimpleMessengerMessage")
-public class Message {
+@Document(collection = "SimpleMessengerReaction")
+public class Reaction {
     @Id
     private UUID id;
     @Field("author")
@@ -24,28 +23,29 @@ public class Message {
     @Indexed
     @Field("chat")
     private UUID chat;
+    @Indexed
+    @Field("message")
+    private UUID message;
     @Field("timestamp")
     private LocalDateTime timestamp;
-    @Field("messageContent")
-    private MessageContent messageContent;
+    @Field("reactionContent")
+    private ReactionContent reactionContent;
 
     @JsonTypeInfo(
         use = JsonTypeInfo.Id.MINIMAL_CLASS
     )
-    public static class MessageContent {
+    public static class ReactionContent {
+    }
+
+    @Data
+    @NoArgsConstructor
+    public static class SawReaction extends ReactionContent {
     }
 
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class TextMessageContent extends MessageContent {
-        private String value;
-    }
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class VoteMessageContent extends MessageContent {
-        private Map<Integer, String> value;
+    public static class VoteReaction extends ReactionContent {
+        Integer option;
     }
 }

@@ -1,6 +1,6 @@
 plugins {
-    id 'org.springframework.boot' version '2.7.3'
-    id 'io.spring.dependency-management' version '1.0.13.RELEASE'
+    id 'org.springframework.boot' version '2.7.4'
+    id 'io.spring.dependency-management' version '1.0.14.RELEASE'
     id 'java'
 }
 
@@ -25,7 +25,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    implementation 'crow.teomant:message-common:0.0.1-SNAPSHOT'
+    implementation 'crow.teomant:reaction-common:0.0.1-SNAPSHOT'
 }
 
 tasks.named('test') {

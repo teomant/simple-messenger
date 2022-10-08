@@ -15,4 +15,10 @@ public class MessageCheckerService {
             .map(m -> m.getChat().equals(chat) && m.getAuthor().equals(author))
             .orElse(false);
     }
+
+    public Boolean checkMessageAndChat(UUID message, UUID chat) {
+        return messageCheckerMongoRepository.findById(message)
+            .map(m -> m.getChat().equals(chat))
+            .orElse(false);
+    }
 }

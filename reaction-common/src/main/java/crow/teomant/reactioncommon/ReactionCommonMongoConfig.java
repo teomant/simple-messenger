@@ -1,7 +1,7 @@
-package crow.teomant.messagecommon;
+package crow.teomant.reactioncommon;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import crow.teomant.messagecommon.model.Message;
+import crow.teomant.reactioncommon.model.Reaction;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import org.springframework.data.convert.WritingConverter;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 
 @Configuration
-public class MongoConfig {
+public class ReactionCommonMongoConfig {
 
     @Bean
     public MongoCustomConversions customConversions(ObjectMapper mapper) {
@@ -25,25 +25,25 @@ public class MongoConfig {
 
     @WritingConverter
     @RequiredArgsConstructor
-    public static class ContentWriteConverter implements Converter<Message.MessageContent, String> {
+    public static class ContentWriteConverter implements Converter<Reaction.ReactionContent, String> {
         private final ObjectMapper objectMapper;
 
         @Override
         @SneakyThrows
-        public String convert(Message.MessageContent source) {
+        public String convert(Reaction.ReactionContent source) {
             return objectMapper.writeValueAsString(source);
         }
     }
 
     @WritingConverter
     @RequiredArgsConstructor
-    public static class ContentReadConverter implements Converter<String, Message.MessageContent> {
+    public static class ContentReadConverter implements Converter<String, Reaction.ReactionContent> {
         private final ObjectMapper objectMapper;
 
         @Override
         @SneakyThrows
-        public Message.MessageContent convert(String source) {
-            return objectMapper.readValue(source, Message.MessageContent.class);
+        public Reaction.ReactionContent convert(String source) {
+            return objectMapper.readValue(source, Reaction.ReactionContent.class);
         }
     }
 }
