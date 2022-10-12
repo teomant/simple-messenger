@@ -28,6 +28,8 @@ dependencies {
     implementation 'crow.teomant:checker:0.0.1-SNAPSHOT'
     implementation 'org.springframework.retry:spring-retry:1.2.5.RELEASE'
     implementation 'org.springframework:spring-aspects:5.2.8.RELEASE'
+    implementation 'org.apache.ignite:ignite-spring-boot-thin-client-autoconfigure-ext:1.0.0'
+    implementation "org.apache.ignite:ignite-core:2.10.0"
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'

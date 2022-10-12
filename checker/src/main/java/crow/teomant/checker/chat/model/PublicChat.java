@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Data
 @TypeAlias("chat.public")
 public class PublicChat extends Chat {
+    @Field("admins")
     private Set<UUID> admins;
     @Field("name")
     private String name;

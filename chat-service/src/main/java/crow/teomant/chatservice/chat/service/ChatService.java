@@ -17,6 +17,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.apache.ignite.Ignite;
+import org.apache.ignite.IgniteCache;
 import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,7 @@ public class ChatService {
     private final ObjectMapper objectMapper;
     private final UserCheckerService userCheckerService;
     private final ChatCheckerService chatCheckerService;
+    private final Ignite ignite;
 
     @SneakyThrows
     public Chat createUserChat(UUID user1Id, UUID user2Id) {
@@ -48,6 +51,9 @@ public class ChatService {
             objectMapper.writeValueAsString(new ChatAdded(user1Id, chat.getId())));
         jmsMessagingTemplate.convertAndSend("user.chat.added",
             objectMapper.writeValueAsString(new ChatAdded(user2Id, chat.getId())));
+
+        IgniteCache<String, String> cache = ignite.getOrCreateCache("chat-cache");
+        cache.put(chat.getId().toString(), objectMapper.writeValueAsString(chat.getParticipants()));
 
         return chat;
     }
@@ -77,6 +83,9 @@ public class ChatService {
             }
         });
 
+        IgniteCache<String, String> cache = ignite.getOrCreateCache("chat-cache");
+        cache.put(chat.getId().toString(), objectMapper.writeValueAsString(chat.getParticipants()));
+
         return chat;
     }
 
@@ -102,6 +111,9 @@ public class ChatService {
 
         jmsMessagingTemplate.convertAndSend("user.chat.added",
             objectMapper.writeValueAsString(new ChatAdded(userId, chat.getId())));
+
+        IgniteCache<String, String> cache = ignite.getOrCreateCache("chat-cache");
+        cache.put(chat.getId().toString(), objectMapper.writeValueAsString(chat.getParticipants()));
 
         return chat;
     }

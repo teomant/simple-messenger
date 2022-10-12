@@ -9,5 +9,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ChatMongoRepository extends MongoRepository<Chat, UUID> {
-    List<Chat> findByParticipantsContains(Set<UUID> ids);
 }

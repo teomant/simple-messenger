@@ -30,6 +30,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'crow.teomant:message-common:0.0.1-SNAPSHOT'
 	implementation 'crow.teomant:checker:0.0.1-SNAPSHOT'
+	implementation 'org.apache.ignite:ignite-spring-boot-thin-client-autoconfigure-ext:1.0.0'
+	implementation "org.apache.ignite:ignite-core:2.10.0"
 }
 
 tasks.named('test') {

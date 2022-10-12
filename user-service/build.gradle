@@ -23,6 +23,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation "org.springframework.boot:spring-boot-starter-activemq"
+    implementation 'org.apache.ignite:ignite-spring-boot-autoconfigure-ext:1.0.0'
+    implementation "org.apache.ignite:ignite-core:2.10.0"
+
     implementation "org.apache.activemq:activemq-broker"
     implementation 'org.apache.activemq:activemq-kahadb-store:5.17.2'
     implementation 'crow.teomant:checker:0.0.1-SNAPSHOT'
